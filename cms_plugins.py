@@ -28,6 +28,9 @@ class NewsFilterPlugin(CMSPluginBase):
         news = sorted(news, key=lambda x: x.publication_date, reverse=True)
         # add our news to the context so that we can render it
         context['news'] = news
+
+        if instance.render_template:
+            self.render_template = instance.render_template
         return context
 
 plugin_pool.register_plugin(NewsFilterPlugin)
