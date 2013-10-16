@@ -1,14 +1,14 @@
+from .models import Newspaper
 from cms.models import Page
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 from cms.models.pluginmodel import CMSPlugin
 from django.utils.translation import ugettext_lazy as _
-from .models import NewsFilter
 
 
-class NewsFilterPlugin(CMSPluginBase):
-    model = NewsFilter
-    name = _("News Filter")
+class NewspaperPlugin(CMSPluginBase):
+    model = Newspaper
+    name = _("Newspaper")
     render_template = 'news_overview.html'
 
     def render(self, context, instance, placeholder):
@@ -19,7 +19,7 @@ class NewsFilterPlugin(CMSPluginBase):
         news = []
         for page in pages:
             # make sure that we only load as many items as we are supposed to.
-            if len(news) == instance.number:
+            if instance.number and len(news) == instance.number:
                 break
             # only load items that available in the right language
             if lang in page.get_languages():
@@ -33,4 +33,4 @@ class NewsFilterPlugin(CMSPluginBase):
             self.render_template = instance.render_template
         return context
 
-plugin_pool.register_plugin(NewsFilterPlugin)
+plugin_pool.register_plugin(NewspaperPlugin)
