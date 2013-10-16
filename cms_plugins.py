@@ -7,15 +7,13 @@ from .models import NewsFilter
 
 
 class NewsFilterPlugin(CMSPluginBase):
-    """Renders an overview of all children of this page that use the
-    news.html template."""
     model = NewsFilter
     name = _("News Filter")
-    render_template = "news_overview.html"
+    render_template = 'news_overview.html'
 
     def render(self, context, instance, placeholder):
-        pages = Page.objects.all()
-        lang = context.get('current_language', None)
+        pages = Page.objects.public().published().filter(template=instance.news_template)
+        lang = context.get('LANGUAGE_CODE', None)
         if not lang:
             return context
         news = []
@@ -23,10 +21,8 @@ class NewsFilterPlugin(CMSPluginBase):
             # make sure that we only load as many items as we are supposed to.
             if len(news) == instance.number:
                 break
-            # only load items that are published, available in the right
-            # language and using the right template.
-            if page.template == 'news.html' and lang in page.get_languages() \
-                    and page.published:
+            # only load items that available in the right language
+            if lang in page.get_languages():
                 news.append(page)
         # sort the object, showing the newest first
         news = sorted(news, key=lambda x: x.publication_date, reverse=True)
