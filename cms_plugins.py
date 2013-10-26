@@ -14,7 +14,8 @@ class NewspaperPlugin(CMSPluginBase):
     def render(self, context, instance, placeholder):
         pages = Page.objects.public().published().filter(template=instance.news_template)
         pages = pages.order_by('publication_date')
-        pages = pages.reverse()
+        if instance.reverse_order:
+            pages = pages.reverse()
         lang = context.get('LANGUAGE_CODE', None)
         if not lang:
             return context
