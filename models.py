@@ -11,6 +11,7 @@ class Newspaper(CMSPlugin):
     number = models.IntegerField(_('number'), default=5, help_text=_('The number of articles that should be displayed. Left blank to omit limitation.'), blank=True)
     news_template = models.CharField(_('news template'), max_length=100, choices=Page.template_choices, help_text=_('News\' template.'))
     render_template = models.CharField(_('render template'), blank=True, max_length=100, choices=Page.template_choices, help_text=_('The template used to render the content.'))
+    reverse_order = models.BooleanField(_('reverse order'), default=True, help_text=_('If you want to show newest first.'))
 
     def __unicode__(self):
         return u'%s \xd7 %s' % (self.template_choices.get(self.news_template, self.news_template), self.number or u'\u221e', )
