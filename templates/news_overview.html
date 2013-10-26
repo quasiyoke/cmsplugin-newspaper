@@ -6,7 +6,7 @@
     {% for new in news %}
         <li>
             <h3>
-                <a href="{{ new.get_path }}">{{ new.get_title }}</a>
+                <a href="{% page_url new %}">{{ new.get_title }}</a>
                 <small> {{ new.publication_date|date:'d. M Y' }}</small>
             </h3>
             {% for placeholder in new.placeholders.all %}
