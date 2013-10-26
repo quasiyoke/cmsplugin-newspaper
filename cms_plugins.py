@@ -13,6 +13,8 @@ class NewspaperPlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         pages = Page.objects.public().published().filter(template=instance.news_template)
+        pages = pages.order_by('publication_date')
+        pages = pages.reverse()
         lang = context.get('LANGUAGE_CODE', None)
         if not lang:
             return context
@@ -24,8 +26,6 @@ class NewspaperPlugin(CMSPluginBase):
             # only load items that available in the right language
             if lang in page.get_languages():
                 news.append(page)
-        # sort the object, showing the newest first
-        news = sorted(news, key=lambda x: x.publication_date, reverse=True)
         # add our news to the context so that we can render it
         context['news'] = news
 
